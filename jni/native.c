@@ -16,10 +16,10 @@ jstring Java_com_example_ndkdhryv7_DhryThread_runNdkDhry(JNIEnv * env, jobject t
 		/*snprintf(res,OUTBUF_SIZE,"Run Dhrystone %d times\n",loops); */
 		dhrymain(loops,res);
 		jres=(*env)->NewStringUTF(env,res);
-		free(res);
 	    /*__android_log_print(ANDROID_LOG_DEBUG, DEBUG_TAG, "native code successful"); */
 	} /*else {
 	    __android_log_print(ANDROID_LOG_DEBUG, DEBUG_TAG, "calloc returns NULL.");
 	}*/
+	free(res);
 	return jres;
 }
