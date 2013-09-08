@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NDKDhryV7</string>
+    <string name="app_name">Dhrystone</string>
     <string name="run_dhrystone">Run</string>
     <string name="num_runs">#Runs:</string>
     <string name="action_settings">Settings</string>
     <string name="default_num_runs">40000</string>
     <string name="abort_dhry">Running</string>
+    <string name="invalid_input">Invalid number of runs</string>
     
 
 </resources>

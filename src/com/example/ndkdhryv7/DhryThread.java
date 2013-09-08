@@ -17,6 +17,12 @@ public class DhryThread extends Thread {
 		mainAct=act;
 	}
 	public void run() {
+		try {
+			// Wait for UI updates
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+		
+		}
     	final String res=runNdkDhry(loopCount);
     	handle.post(new Runnable() {
     		public void run() {

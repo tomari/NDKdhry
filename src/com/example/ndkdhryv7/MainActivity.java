@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-//import android.widget.Toast;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private DhryThread dThread = null;
@@ -30,19 +32,30 @@ public class MainActivity extends Activity {
     public synchronized void RunButtonClicked(View v) {
     	setRunButtonState(dThread==null);
     	if(dThread==null) {
-    		int nLoops=getNumLoops();
+    		int nLoops;
+    		if((nLoops=getNumLoops())<1) {
+    			Toast.makeText(getApplicationContext(), R.string.invalid_input, Toast.LENGTH_SHORT).show();
+    	    	setRunButtonState(false);
+    	    	return;
+    		}
     		dThread=new DhryThread(this,handle,nLoops);
     		dThread.start();
     	} else {
     		// No, we cannot interrupt JNI native function. Sorry.
     		dThread.interrupt();
-    		dThread=null;
+    		//dThread=null;
     	}
     }
     public synchronized void DhryThreadFinished(boolean success, String resultText) {
     	if(success) {
-    		EditText lField=(EditText) findViewById(R.id.logField);
+    		final TextView lField=(TextView) findViewById(R.id.logField);
     		lField.append(resultText);
+    		final ScrollView scrV=(ScrollView) findViewById(R.id.scrollView);
+    		scrV.post(new Runnable() {
+    			public void run() {
+    	    		scrV.smoothScrollTo(0, lField.getHeight());
+    			}
+    		});
     	}
     	dThread=null;
     	setRunButtonState(false);
@@ -53,18 +66,17 @@ public class MainActivity extends Activity {
     	try { 
     		nLoops=Integer.valueOf(rField.getText().toString()).intValue();
     	} catch (NumberFormatException e) {
-    		nLoops=0;
-    	}
-    	if(nLoops<1) {
-    		nLoops=2000;
+    		nLoops=-1;
     	}
     	return nLoops;
     }
     private void setRunButtonState(boolean isAbort) {
     	Button rButton=(Button) findViewById(R.id.button1);
+    	EditText rField=(EditText) findViewById(R.id.numRun);
     	int newText=isAbort?R.string.abort_dhry:R.string.run_dhrystone;
     	rButton.setText(newText);
     	// JNI was not interruptible. Sorry.
     	rButton.setEnabled(!isAbort);
+    	rField.setEnabled(!isAbort);
     }
 }
