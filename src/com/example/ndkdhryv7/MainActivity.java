@@ -3,6 +3,7 @@ package com.example.ndkdhryv7;
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
+import android.view.KeyEvent;
 //import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -14,11 +15,23 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	private DhryThread dThread = null;
 	private Handler handle;
+	private EditText rField;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handle=new Handler();
         setContentView(R.layout.activity_main);
+		rField=(EditText) findViewById(R.id.numRun);
+		rField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				RunButtonClicked(v);
+				return true;
+			}
+			
+		});
     }
 
     /*
@@ -61,7 +74,6 @@ public class MainActivity extends Activity {
     	setRunButtonState(false);
     }
     private int getNumLoops() {
-    	EditText rField=(EditText) findViewById(R.id.numRun);
     	int nLoops;
     	try { 
     		nLoops=Integer.valueOf(rField.getText().toString()).intValue();
