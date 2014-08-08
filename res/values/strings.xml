@@ -8,6 +8,6 @@
     <string name="default_num_runs">40000</string>
     <string name="abort_dhry">Running</string>
     <string name="invalid_input">Invalid number of runs</string>
-    
+	<string name="backlight_off">Backlight OFF</string>
 
 </resources>

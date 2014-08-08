@@ -7,8 +7,11 @@ import android.content.Context;
 import android.view.KeyEvent;
 //import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ public class MainActivity extends Activity {
 	private final String SAVELABEL_RUNLOGS="log";
 	private final String SAVELABEL_NRUNS="nrun";
 	private final String SAVELABEL_SCROLLPOS="scrpos";
+	private float savedScreenBrightness=-1.f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +63,24 @@ public class MainActivity extends Activity {
 		savedInstanceState.putCharSequence(SAVELABEL_NRUNS, rField.getText());
 		savedInstanceState.putInt(SAVELABEL_SCROLLPOS, scrV.getScrollY());
 	}
+	public void setBacklightSwitch(boolean sw) {
+		Window w=getWindow();
+		WindowManager.LayoutParams layoutP=w.getAttributes();
+		if(sw) {
+			layoutP.screenBrightness=savedScreenBrightness;
+		} else {
+			savedScreenBrightness=layoutP.screenBrightness;
+			layoutP.screenBrightness=0.f;
+		}
+		w.setAttributes(layoutP);
+	}
     public synchronized void RunButtonClicked(View v) {
 		hideKeyboard();
     	setRunButtonState(dThread==null);
+		CheckBox backlightBox=(CheckBox) findViewById(R.id.backlightCheckbox);
+		if(backlightBox.isChecked()) {
+			setBacklightSwitch(false);
+		}
     	if(dThread==null) {
     		int nLoops;
     		if((nLoops=getNumLoops())<1) {
@@ -84,7 +103,7 @@ public class MainActivity extends Activity {
     		lField.append(resultText);
     		scrV.post(new Runnable() {
     			public void run() {
-    	    		scrV.smoothScrollTo(0, lField.getHeight());
+					scrV.smoothScrollTo(0, lField.getHeight());
     			}
     		});
     	}

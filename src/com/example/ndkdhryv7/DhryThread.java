@@ -23,6 +23,12 @@ public class DhryThread extends Thread {
 		} catch (InterruptedException e) {
 		
 		}
+		handle.post(new Runnable() {
+			@Override
+			public void run() {
+				mainAct.setBacklightSwitch(true);
+			}
+		});
     	final String res=runNdkDhry(loopCount);
     	handle.post(new Runnable() {
     		public void run() {

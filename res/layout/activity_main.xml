@@ -30,16 +30,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-			android:imeOptions="actionGo"
+            android:imeOptions="actionGo"
             android:inputType="number"
             android:text="@string/default_num_runs" />
 
-        <Button
-            android:id="@+id/button1"
+        <CheckBox
+            android:id="@+id/backlightCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="RunButtonClicked"
-            android:text="@string/run_dhrystone" />
+            android:text="@string/backlight_off" />
     </LinearLayout>
 
     <ScrollView
@@ -49,17 +48,27 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/linearLayout1" >
-            <TextView
-                android:id="@+id/logField"
-                android:layout_width="wrap_content"
-                android:layout_height="0dip"
-                android:layout_marginBottom="51dp"
-                android:layout_marginRight="46dp"
-                android:scrollHorizontally="false"
-                android:scrollbars="vertical"
-                android:textIsSelectable="true"
-                android:typeface="monospace" />
+        android:layout_below="@+id/button1" >
+
+        <TextView
+            android:id="@+id/logField"
+            android:layout_width="wrap_content"
+            android:layout_height="0dip"
+            android:layout_marginBottom="51dp"
+            android:layout_marginRight="46dp"
+            android:scrollHorizontally="false"
+            android:scrollbars="vertical"
+            android:textIsSelectable="true"
+            android:typeface="monospace" />
     </ScrollView>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/linearLayout1"
+        android:layout_below="@+id/linearLayout1"
+        android:onClick="RunButtonClicked"
+        android:text="@string/run_dhrystone" />
 
 </RelativeLayout>
