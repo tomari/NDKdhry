@@ -17,21 +17,18 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	private DhryThread dThread = null;
 	private Handler handle;
-	private EditText rField;
 	private final String SAVELABEL_RUNLOGS="log";
 	private final String SAVELABEL_NRUNS="nrun";
 	private final String SAVELABEL_SCROLLPOS="scrpos";
-	private TextView lField;
-	private ScrollView scrV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handle=new Handler();
         setContentView(R.layout.activity_main);
-		lField=(TextView) findViewById(R.id.logField);
-		scrV=(ScrollView) findViewById(R.id.scrollView);
-		rField=(EditText) findViewById(R.id.numRun);
+		TextView lField=(TextView) findViewById(R.id.logField);
+		final ScrollView scrV=(ScrollView) findViewById(R.id.scrollView);
+		EditText rField=(EditText) findViewById(R.id.numRun);
 		rField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
@@ -55,6 +52,9 @@ public class MainActivity extends Activity {
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
+		TextView lField=(TextView) findViewById(R.id.logField);
+		ScrollView scrV=(ScrollView) findViewById(R.id.scrollView);
+		EditText rField=(EditText) findViewById(R.id.numRun);
 		savedInstanceState.putCharSequence(SAVELABEL_RUNLOGS, lField.getText());
 		savedInstanceState.putCharSequence(SAVELABEL_NRUNS, rField.getText());
 		savedInstanceState.putInt(SAVELABEL_SCROLLPOS, scrV.getScrollY());
@@ -78,6 +78,8 @@ public class MainActivity extends Activity {
     	}
     }
     public synchronized void DhryThreadFinished(boolean success, String resultText) {
+		final TextView lField=(TextView) findViewById(R.id.logField);
+		final ScrollView scrV=(ScrollView) findViewById(R.id.scrollView);
     	if(success) {
     		lField.append(resultText);
     		scrV.post(new Runnable() {
@@ -90,6 +92,7 @@ public class MainActivity extends Activity {
     	setRunButtonState(false);
     }
     private int getNumLoops() {
+		EditText rField=(EditText) findViewById(R.id.numRun);
     	int nLoops;
     	try { 
     		nLoops=Integer.valueOf(rField.getText().toString()).intValue();
