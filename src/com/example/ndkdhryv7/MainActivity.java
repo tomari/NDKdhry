@@ -82,13 +82,14 @@ public class MainActivity extends Activity {
 			setBacklightSwitch(false);
 		}
     	if(dThread==null) {
-    		int nLoops;
-    		if((nLoops=getNumLoops())<1) {
+    		int nLoops=getNumFromField(R.id.numRun);
+    		int nThreads=getNumFromField(R.id.numThreads);
+    		if(nLoops<1 || nThreads<1) {
     			Toast.makeText(getApplicationContext(), R.string.invalid_input, Toast.LENGTH_SHORT).show();
     	    	setRunButtonState(false);
     	    	return;
     		}
-    		dThread=new DhryThread(this,handle,nLoops);
+    		dThread=new DhryThread(this,handle,nLoops,nThreads);
     		dThread.start();
     	} else {
     		// we cannot interrupt JNI native function.
@@ -109,8 +110,8 @@ public class MainActivity extends Activity {
     	dThread=null;
     	setRunButtonState(false);
     }
-    private int getNumLoops() {
-		EditText rField=(EditText) findViewById(R.id.numRun);
+    private int getNumFromField(int fldId) {
+		EditText rField=(EditText) findViewById(fldId);
     	int nLoops;
     	try { 
     		nLoops=Integer.valueOf(rField.getText().toString()).intValue();
@@ -122,11 +123,13 @@ public class MainActivity extends Activity {
     private void setRunButtonState(boolean isAbort) {
     	Button rButton=(Button) findViewById(R.id.button1);
     	EditText rField=(EditText) findViewById(R.id.numRun);
+    	EditText tField=(EditText) findViewById(R.id.numThreads);
     	int newText=isAbort?R.string.abort_dhry:R.string.run_dhrystone;
     	rButton.setText(newText);
     	// JNI was not interruptible. Sorry.
     	//rButton.setEnabled(!isAbort);
     	rField.setEnabled(!isAbort);
+    	tField.setEnabled(!isAbort);
     }
 	private void hideKeyboard() {
 		InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

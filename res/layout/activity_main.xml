@@ -40,7 +40,34 @@
             android:layout_height="wrap_content"
             android:text="@string/backlight_off" />
     </LinearLayout>
-
+	<LinearLayout
+		android:id="@+id/linearLayout2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentRight="true"
+		android:layout_below="@+id/linearLayout1" >
+		<TextView
+			android:id="@+id/textView8"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/num_threads" />
+		<EditText
+			android:id="@+id/numThreads"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:ems="10"
+			android:imeOptions="actionGo"
+			android:inputType="number"
+			android:text="@string/default_num_threads" />
+		<Button
+			android:id="@+id/button1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="RunButtonClicked"
+			android:text="@string/run_dhrystone" />
+	</LinearLayout>
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="wrap_content"
@@ -48,7 +75,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/button1" >
+        android:layout_below="@id/linearLayout2" >
 
         <TextView
             android:id="@+id/logField"
@@ -61,14 +88,5 @@
             android:textIsSelectable="true"
             android:typeface="monospace" />
     </ScrollView>
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/linearLayout1"
-        android:layout_below="@+id/linearLayout1"
-        android:onClick="RunButtonClicked"
-        android:text="@string/run_dhrystone" />
 
 </RelativeLayout>
