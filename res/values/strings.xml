@@ -6,7 +6,7 @@
     <string name="num_runs">#Runs:</string>
     <string name="action_settings">Settings</string>
     <string name="default_num_runs">40000</string>
-    <string name="abort_dhry">Running</string>
+    <string name="abort_dhry">Abort</string>
     <string name="invalid_input">Invalid number of runs</string>
 	<string name="backlight_off">Backlight OFF</string>
 

@@ -91,9 +91,8 @@ public class MainActivity extends Activity {
     		dThread=new DhryThread(this,handle,nLoops);
     		dThread.start();
     	} else {
-    		// No, we cannot interrupt JNI native function. Sorry.
-    		dThread.interrupt();
-    		//dThread=null;
+    		// we cannot interrupt JNI native function.
+			android.os.Process.killProcess(android.os.Process.myPid());
     	}
     }
     public synchronized void DhryThreadFinished(boolean success, String resultText) {
@@ -126,7 +125,7 @@ public class MainActivity extends Activity {
     	int newText=isAbort?R.string.abort_dhry:R.string.run_dhrystone;
     	rButton.setText(newText);
     	// JNI was not interruptible. Sorry.
-    	rButton.setEnabled(!isAbort);
+    	//rButton.setEnabled(!isAbort);
     	rField.setEnabled(!isAbort);
     }
 	private void hideKeyboard() {
