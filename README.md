@@ -3,21 +3,21 @@
 Dhrystone benchmark in C language, compiled for Android devices.
 Uses Android NDK to run Dhrystone benchmark natively on processor.
 
+## Features (v5)
+* Option to turn backlight off during running the benchmark (useful when measuring electrical power consumption)
+* Add support for arm64-v8a, x86_64 and mips64 architectures
+* Multi-process Dhrystone -- run multiple dhrystone processes simultaneously.
+
 ## Supported Devices
-Requires Android 2.2+ due to permission constraints.
-Runs on Android 1.6+ if AndroidManifest.xml is modified:
-```
- android:minSdkVersion="4"
-```
+Runs on Android 1.6+
+Tested against Android L emulator and Android 4.1 Tablet.
 
-Supported processors are armeabi-v7a, x86,
-armeabi and mips.
+Supported processors are arm64-v8a, x86_64, mips64, armeabi-v7a,
+armeabi, x86 and mips.
 Default compiler flags are: "-O3"
-
-Tested on Sony Xperia Tablet Z running Android 4.1.2.
+Binary is built using Android NDK R10.
 
 ## How to compile
-* put android-support-v4.jar into libs directory
 * run ndk-build script included in the Android NDK in jni directory
 * compile project in Eclipse
 
