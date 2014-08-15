@@ -77,7 +77,7 @@ double          Microseconds,
 
 
 extern int
-dhrymain (int nLoops, char *outbuf)
+dhrymain (long nLoops, FILE *outbuf)
 /*****/
 
   /* main program, corresponds to procedures        */
@@ -125,9 +125,9 @@ dhrymain (int nLoops, char *outbuf)
         /* Warning: With 16-Bit processors and Number_Of_Runs > 32000,  */
         /* overflow may occur for this array element.                   */
 
-  outbuf += sprintf (outbuf,"\n");
-  outbuf += sprintf (outbuf,"Dhrystone Benchmark, Version 2.1 (Language: C)\n");
-  outbuf += sprintf (outbuf,"\n");
+  fprintf (outbuf,"\n");
+  fprintf (outbuf,"Dhrystone Benchmark, Version 2.1 (Language: C)\n");
+  fprintf (outbuf,"\n");
 /*
   if (Reg)
   {
@@ -140,15 +140,15 @@ dhrymain (int nLoops, char *outbuf)
     printf ("\n");
   }
 */
-  outbuf += sprintf (outbuf,"Please give the number of runs through the benchmark: ");
+  fprintf (outbuf,"Please give the number of runs through the benchmark: ");
   /*{
     long n;
     scanf ("%ld", &n);*/
     Number_Of_Runs = nLoops;
   /*}*/
-  outbuf += sprintf (outbuf,"\n");
+  fprintf (outbuf,"\n");
 
-  outbuf += sprintf (outbuf,"Execution starts, %d runs through Dhrystone\n",Number_Of_Runs);
+  fprintf (outbuf,"Execution starts, %ld runs through Dhrystone\n",Number_Of_Runs);
 
   /***************/
   /* Start timer */
@@ -208,66 +208,66 @@ dhrymain (int nLoops, char *outbuf)
 
   End_Time = dtime();
 
-  outbuf += sprintf(outbuf,"Execution ends\n");
-  outbuf += sprintf(outbuf,"\n");
-  outbuf += sprintf(outbuf,"Final values of the variables used in the benchmark:\n");
-  outbuf += sprintf(outbuf,"\n");
-  outbuf += sprintf(outbuf,"Int_Glob:            %d\n", Int_Glob);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 5);
-  outbuf += sprintf(outbuf,"Bool_Glob:           %d\n", Bool_Glob);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 1);
-  outbuf += sprintf(outbuf,"Ch_1_Glob:           %c\n", Ch_1_Glob);
-  outbuf += sprintf(outbuf,"        should be:   %c\n", 'A');
-  outbuf += sprintf(outbuf,"Ch_2_Glob:           %c\n", Ch_2_Glob);
-  outbuf += sprintf(outbuf,"        should be:   %c\n", 'B');
-  outbuf += sprintf(outbuf,"Arr_1_Glob[8]:       %d\n", Arr_1_Glob[8]);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 7);
-  outbuf += sprintf(outbuf,"Arr_2_Glob[8][7]:    %d\n", Arr_2_Glob[8][7]);
-  outbuf += sprintf(outbuf,"        should be:   Number_Of_Runs + 10\n");
-  outbuf += sprintf(outbuf,"Ptr_Glob->\n");
-  outbuf += sprintf(outbuf,"  Ptr_Comp:          %ld\n", (long) Ptr_Glob->Ptr_Comp);
-  outbuf += sprintf(outbuf,"        should be:   (implementation-dependent)\n");
-  outbuf += sprintf(outbuf,"  Discr:             %d\n", Ptr_Glob->Discr);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 0);
-  outbuf += sprintf(outbuf,"  Enum_Comp:         %d\n", Ptr_Glob->variant.var_1.Enum_Comp);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 2);
-  outbuf += sprintf(outbuf,"  Int_Comp:          %d\n", Ptr_Glob->variant.var_1.Int_Comp);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 17);
-  outbuf += sprintf(outbuf,"  Str_Comp:          %s\n", Ptr_Glob->variant.var_1.Str_Comp);
-  outbuf += sprintf(outbuf,"        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
-  outbuf += sprintf(outbuf,"Next_Ptr_Glob->\n");
-  outbuf += sprintf(outbuf,"  Ptr_Comp:          %ld\n", (long) Next_Ptr_Glob->Ptr_Comp);
-  outbuf += sprintf(outbuf,"        should be:   (implementation-dependent), same as above\n");
-  outbuf += sprintf(outbuf,"  Discr:             %d\n", Next_Ptr_Glob->Discr);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 0);
-  outbuf += sprintf(outbuf,"  Enum_Comp:         %d\n", Next_Ptr_Glob->variant.var_1.Enum_Comp);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 1);
-  outbuf += sprintf(outbuf,"  Int_Comp:          %d\n", Next_Ptr_Glob->variant.var_1.Int_Comp);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 18);
-  outbuf += sprintf(outbuf,"  Str_Comp:          %s\n", Next_Ptr_Glob->variant.var_1.Str_Comp);
-  outbuf += sprintf(outbuf,"        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
-  outbuf += sprintf(outbuf,"Int_1_Loc:           %d\n", Int_1_Loc);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 5);
-  outbuf += sprintf(outbuf,"Int_2_Loc:           %d\n", Int_2_Loc);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 13);
-  outbuf += sprintf(outbuf,"Int_3_Loc:           %d\n", Int_3_Loc);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 7);
-  outbuf += sprintf(outbuf,"Enum_Loc:            %d\n", Enum_Loc);
-  outbuf += sprintf(outbuf,"        should be:   %d\n", 1);
-  outbuf += sprintf(outbuf,"Str_1_Loc:           %s\n", Str_1_Loc);
-  outbuf += sprintf(outbuf,"        should be:   DHRYSTONE PROGRAM, 1'ST STRING\n");
-  outbuf += sprintf(outbuf,"Str_2_Loc:           %s\n", Str_2_Loc);
-  outbuf += sprintf(outbuf,"        should be:   DHRYSTONE PROGRAM, 2'ND STRING\n");
-  outbuf += sprintf(outbuf,"\n");
+  fprintf(outbuf,"Execution ends\n");
+  fprintf(outbuf,"\n");
+  fprintf(outbuf,"Final values of the variables used in the benchmark:\n");
+  fprintf(outbuf,"\n");
+  fprintf(outbuf,"Int_Glob:            %d\n", Int_Glob);
+  fprintf(outbuf,"        should be:   %d\n", 5);
+  fprintf(outbuf,"Bool_Glob:           %d\n", Bool_Glob);
+  fprintf(outbuf,"        should be:   %d\n", 1);
+  fprintf(outbuf,"Ch_1_Glob:           %c\n", Ch_1_Glob);
+  fprintf(outbuf,"        should be:   %c\n", 'A');
+  fprintf(outbuf,"Ch_2_Glob:           %c\n", Ch_2_Glob);
+  fprintf(outbuf,"        should be:   %c\n", 'B');
+  fprintf(outbuf,"Arr_1_Glob[8]:       %d\n", Arr_1_Glob[8]);
+  fprintf(outbuf,"        should be:   %d\n", 7);
+  fprintf(outbuf,"Arr_2_Glob[8][7]:    %d\n", Arr_2_Glob[8][7]);
+  fprintf(outbuf,"        should be:   Number_Of_Runs + 10\n");
+  fprintf(outbuf,"Ptr_Glob->\n");
+  fprintf(outbuf,"  Ptr_Comp:          %ld\n", (long) Ptr_Glob->Ptr_Comp);
+  fprintf(outbuf,"        should be:   (implementation-dependent)\n");
+  fprintf(outbuf,"  Discr:             %d\n", Ptr_Glob->Discr);
+  fprintf(outbuf,"        should be:   %d\n", 0);
+  fprintf(outbuf,"  Enum_Comp:         %d\n", Ptr_Glob->variant.var_1.Enum_Comp);
+  fprintf(outbuf,"        should be:   %d\n", 2);
+  fprintf(outbuf,"  Int_Comp:          %d\n", Ptr_Glob->variant.var_1.Int_Comp);
+  fprintf(outbuf,"        should be:   %d\n", 17);
+  fprintf(outbuf,"  Str_Comp:          %s\n", Ptr_Glob->variant.var_1.Str_Comp);
+  fprintf(outbuf,"        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
+  fprintf(outbuf,"Next_Ptr_Glob->\n");
+  fprintf(outbuf,"  Ptr_Comp:          %ld\n", (long) Next_Ptr_Glob->Ptr_Comp);
+  fprintf(outbuf,"        should be:   (implementation-dependent), same as above\n");
+  fprintf(outbuf,"  Discr:             %d\n", Next_Ptr_Glob->Discr);
+  fprintf(outbuf,"        should be:   %d\n", 0);
+  fprintf(outbuf,"  Enum_Comp:         %d\n", Next_Ptr_Glob->variant.var_1.Enum_Comp);
+  fprintf(outbuf,"        should be:   %d\n", 1);
+  fprintf(outbuf,"  Int_Comp:          %d\n", Next_Ptr_Glob->variant.var_1.Int_Comp);
+  fprintf(outbuf,"        should be:   %d\n", 18);
+  fprintf(outbuf,"  Str_Comp:          %s\n", Next_Ptr_Glob->variant.var_1.Str_Comp);
+  fprintf(outbuf,"        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
+  fprintf(outbuf,"Int_1_Loc:           %d\n", Int_1_Loc);
+  fprintf(outbuf,"        should be:   %d\n", 5);
+  fprintf(outbuf,"Int_2_Loc:           %d\n", Int_2_Loc);
+  fprintf(outbuf,"        should be:   %d\n", 13);
+  fprintf(outbuf,"Int_3_Loc:           %d\n", Int_3_Loc);
+  fprintf(outbuf,"        should be:   %d\n", 7);
+  fprintf(outbuf,"Enum_Loc:            %d\n", Enum_Loc);
+  fprintf(outbuf,"        should be:   %d\n", 1);
+  fprintf(outbuf,"Str_1_Loc:           %s\n", Str_1_Loc);
+  fprintf(outbuf,"        should be:   DHRYSTONE PROGRAM, 1'ST STRING\n");
+  fprintf(outbuf,"Str_2_Loc:           %s\n", Str_2_Loc);
+  fprintf(outbuf,"        should be:   DHRYSTONE PROGRAM, 2'ND STRING\n");
+  fprintf(outbuf,"\n");
 
   User_Time = End_Time - Begin_Time;
 
   if (User_Time < Too_Small_Time)
   {
-    outbuf += sprintf(outbuf,"Measured time too small to obtain meaningful results:");
-    outbuf += sprintf(outbuf,"%10.1f\n",User_Time);
-    outbuf += sprintf(outbuf,"Please increase number of runs\n");
-    outbuf += sprintf(outbuf,"\n");
+    fprintf(outbuf,"Measured time too small to obtain meaningful results:");
+    fprintf(outbuf,"%10.1f\n",User_Time);
+    fprintf(outbuf,"Please increase number of runs\n");
+    fprintf(outbuf,"\n");
   }
   else
   {
@@ -277,19 +277,19 @@ dhrymain (int nLoops, char *outbuf)
     Vax_Mips = Dhrystones_Per_Second / 1757.0;
 
 #ifdef ROPT
-    outbuf += sprintf(outbuf,"Register option selected?  YES\n");
+    fprintf(outbuf,"Register option selected?  YES\n");
 #else
-    outbuf += sprintf(outbuf,"Register option selected?  NO\n");
+    fprintf(outbuf,"Register option selected?  NO\n");
     strcpy(Reg_Define, "Register option not selected.");
 #endif
-    outbuf += sprintf(outbuf,"Seconds for run through Dhrystone loops:    ");
-    outbuf += sprintf(outbuf,"%10.1f \n", User_Time);
-    outbuf += sprintf(outbuf,"Microseconds for one run through Dhrystone: ");
-    outbuf += sprintf(outbuf,"%7.1f \n", Microseconds);
-    outbuf += sprintf(outbuf,"Dhrystones per Second:                      ");
-    outbuf += sprintf(outbuf,"%10.1f \n", Dhrystones_Per_Second);
-    outbuf += sprintf(outbuf,"VAX MIPS rating = %10.3f \n",Vax_Mips);
-    outbuf += sprintf(outbuf,"\n");
+    fprintf(outbuf,"Seconds for run through Dhrystone loops:    ");
+    fprintf(outbuf,"%10.1f \n", User_Time);
+    fprintf(outbuf,"Microseconds for one run through Dhrystone: ");
+    fprintf(outbuf,"%7.1f \n", Microseconds);
+    fprintf(outbuf,"Dhrystones per Second:                      ");
+    fprintf(outbuf,"%10.1f \n", Dhrystones_Per_Second);
+    fprintf(outbuf,"VAX MIPS rating = %10.3f \n",Vax_Mips);
+    fprintf(outbuf,"\n");
     /*
   fprintf(Ap,"\n");
   fprintf(Ap,"Dhrystone Benchmark, Version 2.1 (Language: C)\n");

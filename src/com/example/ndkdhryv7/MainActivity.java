@@ -1,5 +1,7 @@
 package com.example.ndkdhryv7;
 
+import java.io.File;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
@@ -82,18 +84,19 @@ public class MainActivity extends Activity {
 			setBacklightSwitch(false);
 		}
     	if(dThread==null) {
-    		int nLoops=getNumFromField(R.id.numRun);
-    		int nThreads=getNumFromField(R.id.numThreads);
+    		long nLoops=getNumFromField(R.id.numRun);
+    		int nThreads=(int) getNumFromField(R.id.numThreads);
     		if(nLoops<1 || nThreads<1) {
     			Toast.makeText(getApplicationContext(), R.string.invalid_input, Toast.LENGTH_SHORT).show();
     	    	setRunButtonState(false);
     	    	return;
     		}
-    		dThread=new DhryThread(this,handle,nLoops,nThreads);
+    		dThread=new DhryThread(this,handle,nLoops,nThreads,getCacheDir().getPath()+File.separator);
     		dThread.start();
     	} else {
     		// we cannot interrupt JNI native function.
-			android.os.Process.killProcess(android.os.Process.myPid());
+			//android.os.Process.killProcess(-android.os.Process.myPid());
+    		dThread.killPG();
     	}
     }
     public synchronized void DhryThreadFinished(boolean success, String resultText) {
@@ -110,11 +113,11 @@ public class MainActivity extends Activity {
     	dThread=null;
     	setRunButtonState(false);
     }
-    private int getNumFromField(int fldId) {
+    private long getNumFromField(int fldId) {
 		EditText rField=(EditText) findViewById(fldId);
-    	int nLoops;
+    	long nLoops;
     	try { 
-    		nLoops=Integer.valueOf(rField.getText().toString()).intValue();
+    		nLoops=Long.valueOf(rField.getText().toString()).longValue();
     	} catch (NumberFormatException e) {
     		nLoops=-1;
     	}
