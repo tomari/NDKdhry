@@ -94,3 +94,19 @@ jint Java_com_example_ndkdhryv7_DhryThread_maxThreads(JNIEnv * env, jobject this
 {
 	return DHRY_MAX_THREADS;
 }
+
+#define DIAGBUF_SZ 256L
+jstring Java_com_example_ndkdhryv7_DhryThread_getDiagInfo(JNIEnv *env, jobject this)
+{
+	unsigned int nbits=sizeof(void*)*8;
+	char buf[DIAGBUF_SZ];
+	snprintf(buf,DIAGBUF_SZ,
+			"Compiled with "
+#ifdef __clang__
+			"clang version " __clang_version__
+#elif defined(__GNUC__)
+			"GCC version " __VERSION__
+#endif
+			"\nsize of pointers = %d bits\n", nbits);
+	jstring diagstr=(*env)->NewStringUTF(env,buf);
+}

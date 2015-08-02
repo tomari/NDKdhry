@@ -6,6 +6,7 @@ public class DhryThread extends Thread {
 	private native String runNdkDhry(long loops, int threads, String cacheDir);
 	public native int killPG();
 	private native int maxThreads();
+	public static native String getDiagInfo();
 	static {
 		System.loadLibrary("ndk1");
 	}

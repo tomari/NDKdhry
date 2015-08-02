@@ -53,6 +53,9 @@ public class MainActivity extends Activity {
 					scrV.scrollTo(0,scrollY);
 				}
 			});
+		} else {
+			String diagInfo=DhryThread.getDiagInfo();
+			lField.setText(diagInfo);
 		}
     }
 
