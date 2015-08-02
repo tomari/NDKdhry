@@ -302,6 +302,8 @@ dhrymain (long nLoops, FILE *outbuf)
   fclose(Ap);
 */
   }
+	free(Next_Ptr_Glob);
+	free(Ptr_Glob);
 	return 0;
 }
 
