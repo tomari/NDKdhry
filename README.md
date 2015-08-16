@@ -3,7 +3,11 @@
 Dhrystone benchmark in C language, compiled for Android devices.
 Uses Android NDK to run Dhrystone benchmark natively on processor.
 
-## Features (v5)
+## Changes (v6)
+* Show compiler version and word length on startup
+* Apply Material theme on Android 5.1+ (5.0 has a bug where it's hard to work around)
+
+## Changes (v5)
 * Option to turn backlight off during running the benchmark (useful when measuring electrical power consumption)
 * Add support for arm64-v8a, x86_64 and mips64 architectures
 * Multi-process Dhrystone -- run multiple dhrystone processes simultaneously.
