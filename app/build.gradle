@@ -11,6 +11,8 @@ android {
 
         ndk {
             moduleName "ndk1"
+            ldLibs "log"
+            cFlags "-O3"
         }
     }
 
