@@ -1,6 +1,13 @@
 package com.example.ndkdhryv7;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -55,9 +62,32 @@ public class MainActivity extends Activity {
 			});
 		} else {
 			String diagInfo=DhryThread.getDiagInfo();
-			lField.setText(diagInfo);
+			lField.setText(diagInfo.concat(getCpuInfo()));
 		}
     }
+
+	private String getCpuInfo() {
+		FileReader cpuinfo_file;
+		try {
+			cpuinfo_file=new FileReader("/proc/cpuinfo");
+		} catch (FileNotFoundException e) {
+			return "/proc/cpuinfo not found";
+		}
+		StringBuilder sb=new StringBuilder(4096);
+		sb.append("\n\n/proc/cpuinfo\n");
+		try {
+			BufferedReader br=new BufferedReader(cpuinfo_file);
+			String line;
+			while(null != (line=br.readLine())) {
+				sb.append(line); sb.append('\n');
+			}
+		} catch (IOException e) {
+			sb.append("error reading /proc/cpuinfo\n");
+		} finally {
+			try { cpuinfo_file.close(); } catch (IOException ignored) {}
+		}
+		return sb.toString();
+	}
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
