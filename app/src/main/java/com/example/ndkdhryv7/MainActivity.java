@@ -18,9 +18,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
 	private DhryThread dThread = null;
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
 	private final String SAVELABEL_NRUNS="nrun";
 	private final String SAVELABEL_SCROLLPOS="scrpos";
 	private float savedScreenBrightness=-1.f;
+	private ToggleButton cpusw[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class MainActivity extends Activity {
 				return true;
 			}
 		});
+		prepareCPUswitches();
 		if(savedInstanceState!=null) {
 			lField.setText(savedInstanceState.getCharSequence(SAVELABEL_RUNLOGS));
 			rField.setText(savedInstanceState.getCharSequence(SAVELABEL_NRUNS));
@@ -85,6 +89,22 @@ public class MainActivity extends Activity {
 		return sb.toString();
 	}
 
+	private void prepareCPUswitches() {
+		int np=Runtime.getRuntime().availableProcessors();
+		cpusw=new ToggleButton[np];
+		LinearLayout cpuSwBox=(LinearLayout) findViewById(R.id.cpusScrollView);
+		for(int i=0; i<np; i++) {
+			ToggleButton t=new ToggleButton(this);
+			String labeli=Integer.toString(i);
+			t.setTextOn(labeli);
+			t.setTextOff(labeli);
+			t.setText(labeli);
+			if(i==0) { t.setChecked(true); }
+			cpusw[i]=t;
+			cpuSwBox.addView(t);
+		}
+	}
+
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		TextView lField=(TextView) findViewById(R.id.logField);
@@ -114,7 +134,7 @@ public class MainActivity extends Activity {
 		}
     	if(dThread==null) {
     		long nLoops=getNumFromField(R.id.numRun);
-    		int nThreads=(int) getNumFromField(R.id.numThreads);
+    		int nThreads=1; //(int) getNumFromField(R.id.numThreads);
     		if(nLoops<1 || nThreads<1) {
     			Toast.makeText(getApplicationContext(), R.string.invalid_input, Toast.LENGTH_SHORT).show();
     	    	setRunButtonState(false);
@@ -146,7 +166,7 @@ public class MainActivity extends Activity {
 		EditText rField=(EditText) findViewById(fldId);
     	long nLoops;
     	try { 
-    		nLoops=Long.valueOf(rField.getText().toString()).longValue();
+    		nLoops=Long.valueOf(rField.getText().toString());
     	} catch (NumberFormatException e) {
     		nLoops=-1;
     	}
@@ -155,18 +175,20 @@ public class MainActivity extends Activity {
     private void setRunButtonState(boolean isAbort) {
     	Button rButton=(Button) findViewById(R.id.button1);
     	EditText rField=(EditText) findViewById(R.id.numRun);
-    	EditText tField=(EditText) findViewById(R.id.numThreads);
+    	//EditText tField=(EditText) findViewById(R.id.numThreads);
     	int newText=isAbort?R.string.abort_dhry:R.string.run_dhrystone;
     	rButton.setText(newText);
     	// JNI was not interruptible. Sorry.
     	//rButton.setEnabled(!isAbort);
     	rField.setEnabled(!isAbort);
-    	tField.setEnabled(!isAbort);
+    	//tField.setEnabled(!isAbort);
     }
 	private void hideKeyboard() {
 		InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		if(imm!=null) {
-			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+			try {
+				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			} catch (NullPointerException ignored) {} // getWindowToken can be null
 		}
 	}
 }

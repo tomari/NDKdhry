@@ -40,7 +40,8 @@
             android:layout_height="wrap_content"
             android:text="@string/backlight_off" />
     </LinearLayout>
-	<LinearLayout
+
+    <LinearLayout
 		android:id="@+id/linearLayout2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -52,16 +53,22 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/num_threads" />
-		<EditText
-			android:id="@+id/numThreads"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:ems="10"
-			android:imeOptions="actionGo"
-			android:inputType="number"
-			android:text="@string/default_num_threads" />
-		<Button
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fillViewport="false">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cpusScrollView"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <Button
 			android:id="@+id/button1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
