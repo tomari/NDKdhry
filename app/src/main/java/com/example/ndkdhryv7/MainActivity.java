@@ -1,20 +1,16 @@
 package com.example.ndkdhryv7;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
-//import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
