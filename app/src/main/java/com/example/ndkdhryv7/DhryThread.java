@@ -3,22 +3,21 @@ package com.example.ndkdhryv7;
 import android.os.Handler;
 
 public class DhryThread extends Thread {
-	private native String runNdkDhry(long loops, int threads, String cacheDir);
+	private native String runNdkDhry(long loops, long threads, String cacheDir);
 	public native int killPG();
-	private native int maxThreads();
 	public static native String getDiagInfo();
 	static {
 		System.loadLibrary("ndk1");
 	}
 	
 	private long loopCount;
-	private int threadCount;
+	private long threadArrangement;
 	private MainActivity mainAct;
 	private Handler handle;
 	private String cacheDir;
-	public DhryThread(MainActivity act, Handler hand, long nLoops, int threads, String cacheDir) {
+	public DhryThread(MainActivity act, Handler hand, long nLoops, long threads, String cacheDir) {
 		loopCount=nLoops;
-		threadCount=Math.min(threads,maxThreads());
+		threadArrangement=threads;
 		handle=hand;
 		mainAct=act;
 		this.cacheDir=cacheDir;
@@ -36,7 +35,7 @@ public class DhryThread extends Thread {
 				mainAct.setBacklightSwitch(true);
 			}
 		});
-    	final String res=runNdkDhry(loopCount,threadCount,cacheDir);
+    	final String res=runNdkDhry(loopCount,threadArrangement,cacheDir);
     	handle.post(new Runnable() {
     		public void run() {
     	    	mainAct.DhryThreadFinished(true,res);

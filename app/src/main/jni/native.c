@@ -6,19 +6,22 @@
 #include <signal.h>
 #include <jni.h>
 #include <string.h>
+#define _GNU_SOURCE
+#include <sched.h>
 #include <android/log.h>
+
 #ifndef DHRY_DEBUG
-#define DHRY_DEBUG 1
+#define DHRY_DEBUG 0
 #endif
 #define DEBUG_TAG "NDK_DhryThread"
-#define DHRY_MAX_THREADS 128
+#define DHRY_MAX_THREADS 63
 static const char runlogname[]="run.log";
 char runlogpath[PATH_MAX+1];
 
 extern int dhrymain (long nLoops, FILE *outbuf);
 static void mkRunLogPath(JNIEnv *env, jstring cacheDir);
 static jstring copyLogToJstring(JNIEnv *env);
-static void run_dhry_mt(long loops, int threads, FILE *runlog);
+static void run_dhry_mt(long loops, jlong threads, FILE *runlog);
 
 static void mkRunLogPath(JNIEnv *env, jstring cacheDir) {
 	/* create a file for run log */
@@ -47,29 +50,38 @@ static jstring copyLogToJstring(JNIEnv *env) {
 	return jres;
 }
 
-static void run_dhry_mt(long loops, int threads, FILE *runlog) {
+static void run_dhry_mt(long loops, jlong threads, FILE *runlog) {
 	int pids[DHRY_MAX_THREADS];
 	int pid;
 	int i=0;
-	int nfork=threads-1;
+	int nthreads=__builtin_popcountll(threads);
+	int nfork=nthreads;
+	int cpu_index=0;
 	while(i<nfork) {
+		long long cpu_index=__builtin_ctz(threads);
+		threads &= ~(1ll<<cpu_index);
 		if((pid=fork())<0) { return; }
-		if(pid==0) { break; }
+		if(pid==0) {
+			cpu_set_t cpus;
+			CPU_ZERO(&cpus);
+			CPU_SET(cpu_index,&cpus);
+			sched_setaffinity(getpid(),sizeof(cpus),&cpus);
+			fprintf(runlog, "thread %d at cpu %lld\n",i,cpu_index);
+
+			dhrymain(loops,runlog);
+			fclose(runlog);
+			exit(0);
+		}
 		pids[i++]=pid;
 	}
-	dhrymain(loops,runlog);
 	fclose(runlog);
-	if(pid>0) {
-		for(i=0; i<nfork; i++) {
-			int status;
-			waitpid(pids[i], &status, 0);
-		}
-	} else {
-		exit(0);
+	for(i=0; i<nfork; i++) {
+		int status;
+		waitpid(pids[i], &status, 0);
 	}
 }
 
-jstring Java_com_example_ndkdhryv7_DhryThread_runNdkDhry(JNIEnv * env, jobject this, jlong loops, jint threads, jstring cacheDir)
+jstring Java_com_example_ndkdhryv7_DhryThread_runNdkDhry(JNIEnv * env, jobject this, jlong loops, jlong threads, jstring cacheDir)
 {
 	mkRunLogPath(env, cacheDir);
 	FILE *runlog;
@@ -88,11 +100,6 @@ jstring Java_com_example_ndkdhryv7_DhryThread_runNdkDhry(JNIEnv * env, jobject t
 jint Java_com_example_ndkdhryv7_DhryThread_killPG(JNIEnv * env, jobject this)
 {
 	return kill(-getpgrp(),SIGKILL);
-}
-
-jint Java_com_example_ndkdhryv7_DhryThread_maxThreads(JNIEnv * env, jobject this)
-{
-	return DHRY_MAX_THREADS;
 }
 
 #define DIAGBUF_SZ 256L

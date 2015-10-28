@@ -134,13 +134,13 @@ public class MainActivity extends Activity {
 		}
     	if(dThread==null) {
     		long nLoops=getNumFromField(R.id.numRun);
-    		int nThreads=1; //(int) getNumFromField(R.id.numThreads);
-    		if(nLoops<1 || nThreads<1) {
+    		long threads=getThreadParams(); //(int) getNumFromField(R.id.numThreads);
+    		if(nLoops<1) {
     			Toast.makeText(getApplicationContext(), R.string.invalid_input, Toast.LENGTH_SHORT).show();
     	    	setRunButtonState(false);
     	    	return;
     		}
-    		dThread=new DhryThread(this,handle,nLoops,nThreads,getCacheDir().getPath()+File.separator);
+    		dThread=new DhryThread(this,handle,nLoops,threads,getCacheDir().getPath()+File.separator);
     		dThread.start();
     	} else {
     		// we cannot interrupt JNI native function.
@@ -148,6 +148,15 @@ public class MainActivity extends Activity {
     		dThread.killPG();
     	}
     }
+	private long getThreadParams() {
+		long res=0l;
+		for(int i=0; i<cpusw.length; i++) {
+			if(cpusw[i].isChecked()) {
+				res |= (1l<<i);
+			}
+		}
+		return Math.max(1l,res);
+	}
     public synchronized void DhryThreadFinished(boolean success, String resultText) {
 		final TextView lField=(TextView) findViewById(R.id.logField);
 		final ScrollView scrV=(ScrollView) findViewById(R.id.scrollView);
