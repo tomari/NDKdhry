@@ -59,7 +59,7 @@ static void run_dhry_mt(long loops, jlong threads, FILE *runlog) {
 	int cpu_index=0;
 	while(i<nfork) {
 		long long cpu_index=__builtin_ctzll(threads);
-		threads &= ~(1ll<<cpu_index);
+		threads ^= (1ll<<cpu_index);
 		if((pid=fork())<0) { return; }
 		if(pid==0) {
 			cpu_set_t cpus;
