@@ -240,7 +240,9 @@ public class MainActivity extends Activity {
 			@Override
 			public void run() {
 				String diagInfo=DhryThread.getDiagInfo();
-				final String fieldText=diagInfo.concat(getCpuInfo());
+				final String fieldText=diagInfo
+						.concat(getCpuInfo())
+						.concat(getResources().getString(R.string.startup_msg));
 				handle.post(new Runnable() {
 					@Override
 					public void run() {

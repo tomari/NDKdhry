@@ -14,4 +14,6 @@
     <string name="action_clearlog">Clear log</string>
     <string name="action_share">Share log</string>
     <string name="send_to">Share log using&#8230;</string>
+
+    <string name="startup_msg">\nVisit https://github.com/tomari/NDKdhry for sources.\n</string>
 </resources>
