@@ -2,6 +2,13 @@
 
 Dhrystone benchmark in C language, compiled for Android devices.
 Uses Android NDK to run Dhrystone benchmark natively on processor.
+Processor cores on which to run the benchmark can be specified (useful when you have multiple types of processor cores on a device).
+
+## Changes (v7)
+* Migrate IDE to Android Studio -- supports API>11 until the APP_PLATFORM bug in Android Studio is fixed
+* Show cpuinfo on startup
+* Allow user to choose processor cores on which to run the benchmark
+* Add clear log and share log menu items
 
 ## Changes (v6)
 * Show compiler version and word length on startup
@@ -13,17 +20,16 @@ Uses Android NDK to run Dhrystone benchmark natively on processor.
 * Multi-process Dhrystone -- run multiple dhrystone processes simultaneously.
 
 ## Supported Devices
-Runs on Android 1.6+
-Tested against Android L emulator and Android 4.1 Tablet.
+Runs on Android 3+
+Tested on Android 6 emulator and Android 5.1 Tablet.
 
 Supported processors are arm64-v8a, x86_64, mips64, armeabi-v7a,
 armeabi, x86 and mips.
 Default compiler flags are: "-O3"
-Binary is built using Android NDK R10.
+Binary is built using Android NDK R10e.
 
 ## How to compile
-* run ndk-build script included in the Android NDK in jni directory
-* compile project in Eclipse
+* compile project in Android Studio
 
 ## License
 public domain
