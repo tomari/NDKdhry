@@ -38,9 +38,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         handle=new Handler();
         setContentView(R.layout.activity_main);
-		TextView lField=(TextView) findViewById(R.id.logField);
 		final ScrollView scrV=(ScrollView) findViewById(R.id.scrollView);
-		EditText rField=(EditText) findViewById(R.id.numRun);
+		final EditText rField=(EditText) findViewById(R.id.numRun);
 		rField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
@@ -49,7 +48,12 @@ public class MainActivity extends Activity {
 				return true;
 			}
 		});
-		prepareCPUswitches();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				prepareCPUswitches();
+			}}).start();
+		final TextView lField=(TextView) findViewById(R.id.logField);
 		if(savedInstanceState!=null) {
 			lField.setText(savedInstanceState.getCharSequence(SAVELABEL_RUNLOGS));
 			rField.setText(savedInstanceState.getCharSequence(SAVELABEL_NRUNS));
@@ -61,8 +65,16 @@ public class MainActivity extends Activity {
 				}
 			});
 		} else {
-			String diagInfo=DhryThread.getDiagInfo();
-			lField.setText(diagInfo.concat(getCpuInfo()));
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					String diagInfo=DhryThread.getDiagInfo();
+					final String fieldText=diagInfo.concat(getCpuInfo());
+					handle.post(new Runnable() {
+						@Override
+						public void run() {
+							lField.setText(fieldText);
+						}});}}).start();
 		}
     }
 
@@ -92,16 +104,22 @@ public class MainActivity extends Activity {
 	private void prepareCPUswitches() {
 		int np=Runtime.getRuntime().availableProcessors();
 		cpusw=new ToggleButton[np];
-		LinearLayout cpuSwBox=(LinearLayout) findViewById(R.id.cpusScrollView);
+		final LinearLayout cpuSwBox=(LinearLayout) findViewById(R.id.cpusScrollView);
 		for(int i=0; i<np; i++) {
-			ToggleButton t=new ToggleButton(this);
-			String labeli=Integer.toString(i);
-			t.setTextOn(labeli);
-			t.setTextOff(labeli);
-			t.setText(labeli);
-			if(i==0) { t.setChecked(true); }
+			final ToggleButton t=new ToggleButton(this);
+			final String labeli=Integer.toString(i);
+			final boolean checkedp=i==0;
 			cpusw[i]=t;
-			cpuSwBox.addView(t);
+			handle.post(new Runnable() {
+				@Override
+				public void run() {
+					t.setTextOn(labeli);
+					t.setTextOff(labeli);
+					t.setText(labeli);
+					t.setChecked(checkedp);
+					cpuSwBox.addView(t);
+				}
+			});
 		}
 	}
 
