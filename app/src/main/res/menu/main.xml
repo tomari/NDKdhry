@@ -1,6 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+		android:id="@+id/action_share"
+		android:orderInCategory="50"
+		android:showAsAction="ifRoom"
+		android:title="@string/action_share"
+		android:icon="@drawable/ic_share_24dp" />
+    <item
         android:id="@+id/action_clearlog"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"

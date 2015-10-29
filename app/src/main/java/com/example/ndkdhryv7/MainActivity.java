@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
@@ -220,6 +221,13 @@ public class MainActivity extends Activity {
 		int itemid=item.getItemId();
 		if(itemid==R.id.action_clearlog) {
 			initializeLogArea(true);
+		} else if(itemid==R.id.action_share) {
+			final Intent sendIntent=new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			final TextView lField=(TextView) findViewById(R.id.logField);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, lField.getText());
+			sendIntent.setType("text/plain");
+			startActivity(Intent.createChooser(sendIntent,getResources().getText(R.string.send_to)));
 		} else {
 			return super.onMenuItemSelected(featureId, item);
 		}
