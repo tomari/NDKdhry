@@ -79,26 +79,25 @@ public class MainActivity extends Activity {
     }
 
 	private String getCpuInfo() {
-		FileReader cpuinfo_file;
 		try {
-			cpuinfo_file=new FileReader("/proc/cpuinfo");
+			final FileReader cpuinfo_file=new FileReader("/proc/cpuinfo");
+			final StringBuilder sb=new StringBuilder(4096);
+			sb.append("\n\n/proc/cpuinfo\n");
+			final BufferedReader br=new BufferedReader(cpuinfo_file);
+			try {
+				String line;
+				while(null != (line=br.readLine())) {
+					sb.append(line); sb.append('\n');
+				}
+			} catch (IOException e) {
+				sb.append("error reading /proc/cpuinfo\n");
+			} finally {
+				try { cpuinfo_file.close(); } catch (IOException ignored) {}
+			}
+			return sb.toString();
 		} catch (FileNotFoundException e) {
 			return "/proc/cpuinfo not found";
 		}
-		StringBuilder sb=new StringBuilder(4096);
-		sb.append("\n\n/proc/cpuinfo\n");
-		try {
-			BufferedReader br=new BufferedReader(cpuinfo_file);
-			String line;
-			while(null != (line=br.readLine())) {
-				sb.append(line); sb.append('\n');
-			}
-		} catch (IOException e) {
-			sb.append("error reading /proc/cpuinfo\n");
-		} finally {
-			try { cpuinfo_file.close(); } catch (IOException ignored) {}
-		}
-		return sb.toString();
 	}
 
 	private void prepareCPUswitches() {
