@@ -5,11 +5,11 @@
     <string name="run_dhrystone">Run</string>
     <string name="num_runs">#Runs:</string>
 	<string name="num_threads">CPU:</string>
-    <string name="action_settings">Settings</string>
     <string name="default_num_runs">40000</string>
 	<string name="default_num_threads">1</string>
     <string name="abort_dhry">Abort</string>
     <string name="invalid_input">Invalid number of runs</string>
 	<string name="backlight_off">Backlight OFF</string>
 
+    <string name="action_clearlog">Clear log</string>
 </resources>

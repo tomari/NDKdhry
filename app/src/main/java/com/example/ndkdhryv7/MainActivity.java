@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,7 +40,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         handle=new Handler();
         setContentView(R.layout.activity_main);
-		final ScrollView scrV=(ScrollView) findViewById(R.id.scrollView);
 		final EditText rField=(EditText) findViewById(R.id.numRun);
 		rField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
 			@Override
@@ -53,11 +54,12 @@ public class MainActivity extends Activity {
 			public void run() {
 				prepareCPUswitches();
 			}}).start();
-		final TextView lField=(TextView) findViewById(R.id.logField);
 		if(savedInstanceState!=null) {
+			final TextView lField=(TextView) findViewById(R.id.logField);
 			lField.setText(savedInstanceState.getCharSequence(SAVELABEL_RUNLOGS));
 			rField.setText(savedInstanceState.getCharSequence(SAVELABEL_NRUNS));
 			final int scrollY= savedInstanceState.getInt(SAVELABEL_SCROLLPOS,0);
+			final ScrollView scrV=(ScrollView) findViewById(R.id.scrollView);
 			scrV.post(new Runnable() {
 				@Override
 				public void run() {
@@ -65,16 +67,7 @@ public class MainActivity extends Activity {
 				}
 			});
 		} else {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					String diagInfo=DhryThread.getDiagInfo();
-					final String fieldText=diagInfo.concat(getCpuInfo());
-					handle.post(new Runnable() {
-						@Override
-						public void run() {
-							lField.setText(fieldText);
-						}});}}).start();
+			initializeLogArea(false);
 		}
     }
 
@@ -216,5 +209,43 @@ public class MainActivity extends Activity {
 				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			} catch (NullPointerException ignored) {} // getWindowToken can be null
 		}
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main,menu);
+		return true;
+	}
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		int itemid=item.getItemId();
+		if(itemid==R.id.action_clearlog) {
+			initializeLogArea(true);
+		} else {
+			return super.onMenuItemSelected(featureId, item);
+		}
+		return true;
+	}
+
+	private void initializeLogArea(final boolean scroll) {
+		final TextView lField=(TextView) findViewById(R.id.logField);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String diagInfo=DhryThread.getDiagInfo();
+				final String fieldText=diagInfo.concat(getCpuInfo());
+				handle.post(new Runnable() {
+					@Override
+					public void run() {
+						lField.setText(fieldText);
+						if(scroll) {
+							final ScrollView scrV = (ScrollView) findViewById(R.id.scrollView);
+							scrV.post(new Runnable() {
+								@Override
+								public void run() {
+									scrV.smoothScrollTo(0, 0);
+								}
+							});
+						}
+					}});}}).start();
 	}
 }
