@@ -1,5 +1,7 @@
 # NDKDhryV7
 
+[![CircleCI](https://circleci.com/gh/tomari/NDKdhry.svg?style=svg)](https://circleci.com/gh/tomari/NDKdhry)
+
 Dhrystone benchmark in C language, compiled for Android devices.
 Uses Android NDK to run Dhrystone benchmark natively on processor.
 Processor cores on which to run the benchmark can be specified (useful when you have multiple types of processor cores on a device).
