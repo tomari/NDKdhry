@@ -7,6 +7,7 @@
 #include <jni.h>
 #include <string.h>
 #define _GNU_SOURCE
+#define __USE_GNU
 #include <sched.h>
 #include <android/log.h>
 
@@ -116,4 +117,6 @@ jstring Java_com_example_ndkdhryv7_DhryThread_getDiagInfo(JNIEnv *env, jobject t
 #endif
 			"\nsize of pointers = %d bits\n", nbits);
 	jstring diagstr=(*env)->NewStringUTF(env,buf);
+	return diagstr;
 }
+
