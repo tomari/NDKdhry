@@ -1,3 +1,5 @@
+# This project has been migrated to https://gitlab.com/tomari/NDKdhry
+
 # NDKDhryV7
 
 [![CircleCI](https://circleci.com/gh/tomari/NDKdhry.svg?style=svg)](https://circleci.com/gh/tomari/NDKdhry)
